@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:padding="16dp"
+    tools:context=".MainActivity">
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Αγορά Πελάτη"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/etCustomerEmail"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Email πελάτη"
+        android:inputType="textEmailAddress"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnConnect"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Προβολή Αγοράς Πελάτη"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Κατηγορία Προϊόντος"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/etProductCategory"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Κατηγορία προϊόντος"
+        android:inputType="text"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnViewPurchase"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Προβολή Κατηγορίας Προϊόντος"
+        android:layout_marginBottom="16dp"/>
+
+    <TextView
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Αγορές Πελάτη από Κατάστημα"
+        android:textSize="16sp"
+        android:textStyle="bold"
+        android:layout_marginTop="16dp"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/etCustomerName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Όνομα πελάτη"
+        android:inputType="textPersonName"
+        android:layout_marginBottom="8dp"/>
+
+    <EditText
+        android:id="@+id/etStoreName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="Όνομα καταστήματος"
+        android:inputType="text"
+        android:layout_marginBottom="8dp"/>
+
+    <Button
+        android:id="@+id/btnViewCustomerPurchases"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:text="Προβολή αγορών πελάτη από κατάστημα"
+        android:layout_marginBottom="16dp"/>
+
+    <ProgressBar
+        android:id="@+id/progressBar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:visibility="gone" />
+
+    <LinearLayout
+        android:id="@+id/listViewHeader"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:padding="8dp"
+        android:background="@android:color/darker_gray"
+        android:visibility="gone">
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="2"
+            android:text="Κατάστημα"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:layout_weight="1"
+            android:text="Κατηγορία"
+            android:textStyle="bold"/>
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="Ποσότητα"
+            android:textStyle="bold"
+            android:paddingLeft="8dp"/>
+
+    </LinearLayout>
+
+    <ListView
+        android:id="@+id/purchaseListView"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1" />
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1">
+
+        <TextView
+            android:id="@+id/tvPurchaseInfo"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="8dp"
+            android:visibility="gone"/>
+
+    </ScrollView>
+
+</LinearLayout>
