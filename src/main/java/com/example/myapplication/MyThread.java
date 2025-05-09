@@ -3,8 +3,8 @@ package com.example.myapplication;
 import android.os.Handler;
 import android.os.Message;
 import android.util.Log;
+import android.content.Context;
 import java.io.IOException;
-import java.io.EOFException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
@@ -19,6 +19,7 @@ public class MyThread extends Thread {
     private String requestType;
     private String requestParam;
     private Socket socket;
+    private Context context;
 
     // Constants for request types
     public static final String REQUEST_PRODUCT_CATEGORY = "productCategory";
@@ -33,7 +34,8 @@ public class MyThread extends Thread {
     public static final int MSG_CONNECTION_ERROR = 3;
     public static final int MSG_CUSTOMER_PURCHASES = 4;
 
-    public MyThread(Handler handler, String serverIP, int serverPort, String requestType, String requestParam) {
+    public MyThread(Context context, Handler handler, String serverIP, int serverPort, String requestType, String requestParam) {
+        this.context = context;
         this.handler = handler;
         this.serverIP = serverIP;
         this.serverPort = serverPort;
@@ -259,7 +261,8 @@ public class MyThread extends Thread {
                 java.util.HashMap<String, Integer> purchases = (java.util.HashMap<String, Integer>) response;
                 ArrayList<Product> products = new ArrayList<>();
                 for (java.util.Map.Entry<String, Integer> entry : purchases.entrySet()) {
-                    products.add(new Product(entry.getKey(), "", entry.getValue(), 0.0));
+                    double price = getProductPriceFromStoreJson(context, storeName, entry.getKey());
+                    products.add(new Product(entry.getKey(), "", entry.getValue(), price));
                 }
                 Message msg = handler.obtainMessage(MSG_CUSTOMER_PURCHASES, products);
                 handler.sendMessage(msg);
@@ -579,5 +582,35 @@ public class MyThread extends Thread {
         } catch (IOException e) {
             Log.e(TAG, "Error closing resources: " + e.toString(), e);
         }
+    }
+
+    // Βοηθητική μέθοδος για εύρεση τιμής προϊόντος από τα assets (store.json)
+    private double getProductPriceFromStoreJson(Context context, String storeName, String productName) {
+        try {
+            InputStream is = context.getAssets().open("store.json");
+            InputStreamReader reader = new InputStreamReader(is);
+            org.json.simple.parser.JSONParser parser = new org.json.simple.parser.JSONParser();
+            org.json.simple.JSONArray stores = (org.json.simple.JSONArray) parser.parse(reader);
+            for (Object storeObj : stores) {
+                org.json.simple.JSONObject store = (org.json.simple.JSONObject) storeObj;
+                if (storeName.equalsIgnoreCase((String) store.get("StoreName"))) {
+                    org.json.simple.JSONArray products = (org.json.simple.JSONArray) store.get("Products");
+                    for (Object productObj : products) {
+                        org.json.simple.JSONObject product = (org.json.simple.JSONObject) productObj;
+                        if (productName.equalsIgnoreCase((String) product.get("ProductName"))) {
+                            Object priceObj = product.get("Price");
+                            if (priceObj instanceof Number) {
+                                return ((Number) priceObj).doubleValue();
+                            } else if (priceObj != null) {
+                                return Double.parseDouble(priceObj.toString());
+                            }
+                        }
+                    }
+                }
+            }
+        } catch (Exception e) {
+            // Αν δεν βρεθεί τιμή, επιστρέφει 0
+        }
+        return 0.0;
     }
 }
